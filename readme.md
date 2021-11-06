@@ -22,4 +22,5 @@ Você pode acessando os dados persistindo através do MongoDb Compass, se você 
 link: https://www.mongodb.com/try/download/compass
 
 Após instalado insira a seguinte string de conexão e clique em 'connect'
+
 ``mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false``
