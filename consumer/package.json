@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "start": "nodemon src/app.ts --resolveJsonModule=true"
+  },
+  "dependencies": {
+    "kafka-node": "2.6.1",
+    "mongoose": "^6.0.12",
+    "nodemon": "2.0.2",
+    "ts-node": "^10.4.0"
+  }
+}

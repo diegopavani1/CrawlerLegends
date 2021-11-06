@@ -1,0 +1,56 @@
+version: "3"
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper:3.4.6
+    container_name: kafka-zookeeper
+    ports:
+      - 2181:2181
+  kafka:
+    image: wurstmeister/kafka:2.11-1.1.0
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_CREATE_TOPICS: legends-topic:1:1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    ports:
+      - 9092:9092
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  database:
+    image: mongo:latest
+    container_name: mongodb-container
+    depends_on:
+      - zookeeper
+      - kafka
+    environment:
+      -MONGO_INITDB_DATABASE: implus
+      -MONGO_INITDB_ROOT_USERNAME: implususer
+      -MONGO_INITDB_ROOT_PASSWORD: implusVerySecrete
+    ports:
+      - 27017-27019:27017-27019
+    volumes:
+      - ./data_mongo:/data/db
+  producer:
+    build: ./producer
+    container_name: kafka-producer
+    command: sh -c "npm start"
+    depends_on:
+      - zookeeper
+      - kafka
+      - database
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      MONGO_CONNECT: database:27017
+  consumer:
+    build: ./consumer
+    container_name: kafka--consumer
+    command: sh -c "npm start"
+    depends_on:
+      - zookeeper
+      - kafka
+      - database
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      MONGO_CONNECT: database:27017
