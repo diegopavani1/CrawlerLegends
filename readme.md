@@ -18,7 +18,7 @@ Após clonar o repositório e entrar na pasta, você precisará rodar o comando 
 ``docker-compose up --build``
 
 ## Acessando o banco de dados
-Você pode acessando os dados persistindo através do MongoDb Compass, se você não tiver instalado você pode baixar pelo
+Você pode acessando os dados através do MongoDb Compass, se você não tiver instalado você pode baixar pelo
 link: https://www.mongodb.com/try/download/compass
 
 Após instalado insira a seguinte string de conexão e clique em 'connect'
