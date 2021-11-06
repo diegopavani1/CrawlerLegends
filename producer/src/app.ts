@@ -1,5 +1,5 @@
-import Legends from './controllers/legends'
-const legends: Legends = new Legends();
-legends.startCrawler().then(r => {
+import Subtitles from './controllers/subtitles'
+const subtitles: Subtitles = new Subtitles();
+subtitles.startCrawler().then((r: any) => {
     console.log('terminou de rodar job')
 })

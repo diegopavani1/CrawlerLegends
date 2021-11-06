@@ -1,10 +1,10 @@
 import puppeteer from 'puppeteer'
 import Credentials from '../config/credentials.json'
 import Cryptography from '../commons/cryptography'
-import legendsInterface from '../interfaces/legends'
+import subtitlesInterface from '../interfaces/subtitles'
 const kafka = require('kafka-node');
-class Legends {
-    url: string = 'http://legendas.tv'
+class Subtitles {
+    url: string = 'http://legendas.tv/'
     cryptography: Cryptography = new Cryptography()
     credentials: any = {
         user: this.cryptography.decrypt(Credentials.user.rb, Credentials.user.valueEncrypted),
@@ -54,24 +54,24 @@ class Legends {
         })
         await page.waitForNavigation()
 
-        const legendsItems: legendsInterface[] = await page.evaluate(async () => {
+        const subtitlesItems: subtitlesInterface[] = await page.evaluate(async () => {
             // @ts-ignore
-            const legendsSections: any = document.querySelector(
+            const subtitlesSections: any = document.querySelector(
                 'body > div[class="container"] > div[class="middle busca"] > div[id="resultado_busca_cont"] > section[id="resultado_busca"] > div[class="gallery clearfix list_element"] ').querySelectorAll('article > div'
             )
-            const legendsItems: legendsInterface[] = []
-            legendsSections.forEach((legend: any) => {
-                const legendHtml = legend.querySelector('div')
-                const name = legendHtml.querySelector('a').outerText.replace(/ /g,'');
-                const data = legendHtml.querySelector('p[class="data"]').outerText.split(',')
+            const subtitlesItems: subtitlesInterface[] = []
+            subtitlesSections.forEach((subtitle: any) => {
+                const subtitleHtml = subtitle.querySelector('div')
+                const name = subtitleHtml.querySelector('a').outerText.replace(/ /g,'');
+                const data = subtitleHtml.querySelector('p[class="data"]').outerText.split(',')
                 const downloads = parseFloat(data[0].match(/\d+/g))
-                const link: string = legendHtml.querySelector('a[href]').getAttribute('href')
+                const link: string = subtitleHtml.querySelector('a[href]').getAttribute('href')
                 const nota = parseFloat(data[1].match(/\d+/g))
                 const dataSent = data[2].toString().replace('enviado por', '').split('em')
                 const whoSent = dataSent[0].replace(/ /g,'')
                 const dateSent = dataSent[1].replace(/ /g,'')
-                const languague = legend.querySelector('img').getAttribute('title')
-                legendsItems.push({
+                const languague = subtitle.querySelector('img').getAttribute('title')
+                subtitlesItems.push({
                     name: name,
                     dateSent: dateSent,
                     downloadLink: link,
@@ -82,10 +82,10 @@ class Legends {
                     whoSent: whoSent
                 })
             });
-            return legendsItems
+            return subtitlesItems
         })
         let i = 0
-        for await (const item of legendsItems) {
+        for await (const item of subtitlesItems) {
             await page.goto(`${this.url}${item.downloadLink}`)
             const likes = await page.evaluate(async (i) => {
                 // @ts-ignore
@@ -106,25 +106,25 @@ class Legends {
                 }
             })
             if (likes.likes > 0 && likes.unlikes > 0){
-                legendsItems[i].likeRatio = (Math.round((likes.likes / likes.unlikes) * 100) / 100)
+                subtitlesItems[i].likeRatio = (Math.round((likes.likes / likes.unlikes) * 100) / 100)
             } else {
-                legendsItems[i].likeRatio = 0.00
+                subtitlesItems[i].likeRatio = 0.00
             }
-            const message = legendsItems[i]
+            const message = subtitlesItems[i]
             const payload = [{
-                topic: 'legends-topic',
+                topic: 'subtitles-topic',
                 messages: JSON.stringify(message),
                 attributes: 1
             }]
             kafkaProducer.send(payload, function(error: any, result: any) {
-                console.log('ENVIANDO legenda para a fila')
+                console.log('ENVIANDO legendas para a fila')
                 if (error) {
-                    console.error('Falha ao enviar para fila :', error)
+                    console.error('Falha ao enviar legenda para fila :', error)
                 }
             })
             i++
         }
-        console.log(`Foram encontradas ${legendsItems.length + 1} legendas`)
+        console.log(`Foram encontradas ${subtitlesItems.length + 1} legendas`)
     }
 }
-export = Legends
+export  = Subtitles

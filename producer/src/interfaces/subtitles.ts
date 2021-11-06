@@ -1,4 +1,4 @@
-interface legendsInterface {
+interface subtitlesInterface {
     name: string;
     qtdDownloads: number;
     note: number,
@@ -8,4 +8,4 @@ interface legendsInterface {
     language: string,
     downloadLink: string
 }
-export = legendsInterface
+export = subtitlesInterface

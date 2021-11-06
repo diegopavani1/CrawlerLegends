@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose'
 
-interface legendsInterface {
+interface subtitlesInterface {
     name: string;
     qtdDownloads: number;
     note: number,
@@ -10,7 +10,7 @@ interface legendsInterface {
     language: string,
     downloadLink: string
 }
-const legendsSchema = new Schema<legendsInterface>({
+const subtitlesSchema = new Schema<subtitlesInterface>({
     name: { type: String, required: true },
     qtdDownloads: { type: Number, required: true },
     note: { type: Number, required: true },
@@ -20,5 +20,5 @@ const legendsSchema = new Schema<legendsInterface>({
     language: { type: String, required: true },
     downloadLink: { type: String, required: true }
 })
-const LegendsModel = model<legendsInterface>('Legends', legendsSchema)
-export = LegendsModel
+const SubtitlesModel = model<subtitlesInterface>('Subtitles', subtitlesSchema)
+export = SubtitlesModel
