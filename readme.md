@@ -6,7 +6,7 @@
 O projeto se trata de um scrapper que raspa o site <http://legendas.tv/> salvando as informações no banco de dados não relacional MongoDB.
 O projeto consiste em 2 workers, um producer e um consumer, a comunicação entre eles é realizado pelo kafka.
 
-#### O producer é o 'worker' raspar o site e extrair as informações necessárias, enviando em forma de mensagem para um topico do kafka.
+#### O producer é o 'worker' que raspa o site e extrai as informações necessárias, enviando em forma de mensagem para um topico do kafka.
 #### O consumer é o 'worker' que ficará escutando no topico do kafka e irá realizar a persistencia das informações no banco de dados.
 
 ## Requisitos
@@ -15,4 +15,11 @@ O projeto consiste em 2 workers, um producer e um consumer, a comunicação entr
 ## Como subir o ambiente
 Após clonar o repositório e entrar na pasta, você precisará rodar o comando abaixo no terminal
 
-``docker-compose up -d``
+``docker-compose up --build``
+
+## Acessando o banco de dados
+Você pode acessando os dados persistindo através do MongoDb Compass, se você não tiver instalado você pode baixar pelo
+link: https://www.mongodb.com/try/download/compass
+
+Após instalado insira a seguinte string de conexão e clique em 'connect'
+``mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false``
