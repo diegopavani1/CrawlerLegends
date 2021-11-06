@@ -8,3 +8,10 @@ O projeto consiste em 2 workers, um producer e um consumer, a comunicação entr
 
 #### O producer é o 'worker' raspar o site e extrair as informações necessárias, enviando em forma de mensagem para um topico do kafka.
 #### O consumer é o 'worker' que ficará escutando no topico do kafka e irá realizar a persistencia das informações no banco de dados.
+
+## Requisitos
+É necessário ter o docker na maquina em que irá subir o ambiente
+
+## Como subir o ambiente
+Após clonar o repositório e entrar na pasta, você precisará rodar o comando abaixo no terminal
+``docker-compose up -d``
