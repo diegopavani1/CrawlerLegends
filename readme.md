@@ -14,4 +14,5 @@ O projeto consiste em 2 workers, um producer e um consumer, a comunicação entr
 
 ## Como subir o ambiente
 Após clonar o repositório e entrar na pasta, você precisará rodar o comando abaixo no terminal
+
 ``docker-compose up -d``
